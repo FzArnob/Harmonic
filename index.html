@@ -140,8 +140,12 @@
                 var a;
                 await fetch('./search-api.html?key='+ele.value)
                 .then(res =>{
-                console.log(res);
+                    if(res.ok) return res.json()
 
+                })
+                .then(data =>{
+                console.log(data.contents);
+                    
                 });
 
             //     await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://www.youtube.com/results?app=desktop&search_query='+ele.value)}`)
