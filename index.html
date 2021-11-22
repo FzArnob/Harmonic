@@ -137,8 +137,12 @@
             document.getElementById(id).style.display = "none";
             if(ele.value.length > 3){
                 console.log('len > 3');
-                var a = await fetch('./search-api.html?key='+ele.value);
-                console.log(a);
+                var a;
+                await fetch('./search-api.html?key='+ele.value)
+                .then(res =>{
+                console.log(res);
+
+                });
 
             //     await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://www.youtube.com/results?app=desktop&search_query='+ele.value)}`)
             // .then(response => {
