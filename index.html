@@ -137,7 +137,7 @@
             document.getElementById(id).style.display = "none";
             if(ele.value.length > 3){
                 console.log('len > 3');
-                await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://www.youtube.com/results?app=desktop&search_query='+ele.value)}`)
+                await fetch(`https://thingproxy.freeboard.io/fetch/${encodeURIComponent('https://www.youtube.com/results?app=desktop&search_query='+ele.value)}`)
             .then(response => {
                 if (response.ok) return response.json()
                 output = {
