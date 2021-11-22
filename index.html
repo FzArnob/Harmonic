@@ -137,78 +137,81 @@
             document.getElementById(id).style.display = "none";
             if(ele.value.length > 3){
                 console.log('len > 3');
-                await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://www.youtube.com/results?app=desktop&search_query='+ele.value)}`)
-            .then(response => {
-                if (response.ok) return response.json()
-                output = {
-                            status: 500,
-                            Error: 'Network response was not ok.'
-                        }
-                throw new Error('Network response was not ok.')
-                document.getElementById("pt").innerHTML = "Please, Try Later! Server is Under Maintenance.";
-                    document.getElementById("pt").style.display = 'block';
-            })
-            .then(data => {
-                let cutter1 = "ytInitialData = ";
-                let s1 = data.contents.split(cutter1)[1];
-                let cutter2 = ";</scrip";
-                let finalDataString;
-                if(s1) {
-                    finalDataString = s1.split(cutter2);
-                    if(finalDataString[1]) {
-                        let obj = JSON.parse(finalDataString[0]);
-                        let contents = obj.contents?.twoColumnSearchResultsRenderer?.primaryContents?.sectionListRenderer?.contents[0]?.itemSectionRenderer?.contents;
-                        if(contents){
-                            let temp = [];
-                            contents.forEach(data => {
-                                if (data.videoRenderer) temp.push(data);                            
-                            });
-                            contents = temp;
-                            output = {
-                                status: 200,
-                                searchResults: contents
-                            }
-                            console.log(output);
-                            document.getElementById(id).innerHTML = JSON.stringify(output);
-                            document.getElementById(id).style.display = "block";
-                        } else {
-                            output = {
-                            status: 500,
-                            Error: 'Data structure changed'
-                            }
-                            throw new Error('Data structure changed')
-                            document.getElementById("pt").innerHTML = "Please, Try Later! Server is Under Maintenance.";
-                    document.getElementById("pt").style.display = 'block';
-                        }
+                var a = await fetch('./search-api.html?key='+ele.value);
+                console.log(a);
+
+            //     await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://www.youtube.com/results?app=desktop&search_query='+ele.value)}`)
+            // .then(response => {
+            //     if (response.ok) return response.json()
+            //     output = {
+            //                 status: 500,
+            //                 Error: 'Network response was not ok.'
+            //             }
+            //     throw new Error('Network response was not ok.')
+            //     document.getElementById("pt").innerHTML = "Please, Try Later! Server is Under Maintenance.";
+            //         document.getElementById("pt").style.display = 'block';
+            // })
+            // .then(data => {
+            //     let cutter1 = "ytInitialData = ";
+            //     let s1 = data.contents.split(cutter1)[1];
+            //     let cutter2 = ";</scrip";
+            //     let finalDataString;
+            //     if(s1) {
+            //         finalDataString = s1.split(cutter2);
+            //         if(finalDataString[1]) {
+            //             let obj = JSON.parse(finalDataString[0]);
+            //             let contents = obj.contents?.twoColumnSearchResultsRenderer?.primaryContents?.sectionListRenderer?.contents[0]?.itemSectionRenderer?.contents;
+            //             if(contents){
+            //                 let temp = [];
+            //                 contents.forEach(data => {
+            //                     if (data.videoRenderer) temp.push(data);                            
+            //                 });
+            //                 contents = temp;
+            //                 output = {
+            //                     status: 200,
+            //                     searchResults: contents
+            //                 }
+            //                 console.log(output);
+            //                 document.getElementById(id).innerHTML = JSON.stringify(output);
+            //                 document.getElementById(id).style.display = "block";
+            //             } else {
+            //                 output = {
+            //                 status: 500,
+            //                 Error: 'Data structure changed'
+            //                 }
+            //                 throw new Error('Data structure changed')
+            //                 document.getElementById("pt").innerHTML = "Please, Try Later! Server is Under Maintenance.";
+            //         document.getElementById("pt").style.display = 'block';
+            //             }
                         
-                    } else {
-                        output = {
-                            status: 500,
-                            Error: 'End cutter failed.'
-                        }
-                        throw new Error('End cutter failed.')
-                        document.getElementById("pt").innerHTML = "Please, Try Later! Server is Under Maintenance.";
-                    document.getElementById("pt").style.display = 'block';
-                    }
-                } else {
-                    output = {
-                            status: 500,
-                            Error: 'ytInitialData failed.'
-                        }
-                    throw new Error('ytInitialData failed.')
-                    document.getElementById("pt").innerHTML = "Please, Try Later! Server is Under Maintenance.";
-                    document.getElementById("pt").style.display = 'block';
-                }  
-            })
-            .catch(err =>{
-                output = {
-                            status: 500,
-                            Error: 'Fetch failed.'
-                        }
-                    throw new Error('Fetch failed.')
-                    document.getElementById("pt").innerHTML = "Please, Try Later! Server is Under Maintenance.";
-                    document.getElementById("pt").style.display = 'block';
-            });    
+            //         } else {
+            //             output = {
+            //                 status: 500,
+            //                 Error: 'End cutter failed.'
+            //             }
+            //             throw new Error('End cutter failed.')
+            //             document.getElementById("pt").innerHTML = "Please, Try Later! Server is Under Maintenance.";
+            //         document.getElementById("pt").style.display = 'block';
+            //         }
+            //     } else {
+            //         output = {
+            //                 status: 500,
+            //                 Error: 'ytInitialData failed.'
+            //             }
+            //         throw new Error('ytInitialData failed.')
+            //         document.getElementById("pt").innerHTML = "Please, Try Later! Server is Under Maintenance.";
+            //         document.getElementById("pt").style.display = 'block';
+            //     }  
+            // })
+            // .catch(err =>{
+            //     output = {
+            //                 status: 500,
+            //                 Error: 'Fetch failed.'
+            //             }
+            //         throw new Error('Fetch failed.')
+            //         document.getElementById("pt").innerHTML = "Please, Try Later! Server is Under Maintenance.";
+            //         document.getElementById("pt").style.display = 'block';
+            // });    
             } else {
                 console.log('len <= 3');
             document.getElementById("pt").innerHTML = "Please, type more than three(3) characters.";
