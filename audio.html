@@ -1,0 +1,21 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Harmonic Search</title>
+</head>
+<body>
+    <div onclick="playAudio(this, 'https:'+'/'+'/api3.youtube-mp3.org.in/@download/56aef5227312184c8d0ce64189e144726f110f7191fc349597a9a65f73f3ad35?bypass=false&bypass2=false')" style="background-color: gray; padding: 10px;">Play</div>
+    <script>
+        function playAudio(ele, url){
+            var audioElement = new Audio(url);
+            audioElement.play();
+        }
+        
+        // var mp3 = document.createElement("audio");
+        // mp3.setAttribute('src', 'https://api3.youtube-mp3.org.in/@download/2023bd17308a56cd4b2f2d3d036bee78c3479fa32b9f3c5b2124a5d00ef080fa?bypass=false&bypass2=false');
+        // mp3.load();
+        // document.documentElement.appendChild(mp3);
+    </script>
+</body>
+</html>

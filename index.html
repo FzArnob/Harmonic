@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Harmonic</title>
+<link href="./view/static/favicon.png" rel="icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="view/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="home">
+        <script>var n = 1000;</script>
+        <div class="top">
+            <div class="nav">
+                <div class="round-btn menu"><img src="./view/static/btn/menu.png"/></div>
+                <div class="round-btn list"><img src="./view/static/btn/list.png"/></div>
+                <div class="round-btn theme"><img src="./view/static/btn/theme.png"/></div>
+            </div>
+        </div>
+        <div style="padding-left: 20px; padding-right: 20px;">
+            <div class="search" onclick="searchFocus(this)" id="search">
+                <img class="search-icon" src="./view/static/btn/search.png"/>
+                <input id="searchInput" type="text" placeholder="Look for songs, artists and tracks" onfocus="searchFocus(this)" onfocusout="searchFocusOut(this)">
+                <div class="stext" onclick="showResults('results')">Search</div>
+            </div>
+        </div>
+        <div class="pan" id="pan">
+            <p class="pan-text" id="pt">Find your favourite songs from different Artists</p>
+            <div class="results" id="results"></div>
+        </div>
+        <div class="suggest">
+
+        </div>
+        <div class="trending">
+
+        </div>
+    </div>
+    <script>
+        // console.log(n);
+        async function searchTrack(ele, id){
+            var output;
+            if(ele.value.length > 2){
+
+            }
+            await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://www.youtube.com/results?app=desktop&search_query='+ele.value)}`)
+            .then(response => {
+                if (response.ok) return response.json()
+                output = {
+                            status: 500,
+                            Error: 'Network response was not ok.'
+                        }
+                throw new Error('Network response was not ok.')
+            })
+            .then(data => {
+                let cutter1 = "ytInitialData = ";
+                let s1 = data.contents.split(cutter1)[1];
+                let cutter2 = ";</scrip";
+                let finalDataString;
+                if(s1) {
+                    finalDataString = s1.split(cutter2);
+                    if(finalDataString[1]) {
+                        let obj = JSON.parse(finalDataString[0]);
+                        let contents = obj.contents?.twoColumnSearchResultsRenderer?.primaryContents?.sectionListRenderer?.contents[0]?.itemSectionRenderer?.contents;
+                        if(contents){
+                            let temp = [];
+                            contents.forEach(data => {
+                                if (data.videoRenderer) temp.push(data);                            
+                            });
+                            contents = temp;
+                            output = {
+                                status: 200,
+                                searchResults: contents
+                            }
+                            console.log(output);
+                            return output;
+                        } else {
+                            output = {
+                            status: 500,
+                            Error: 'Data structure changed'
+                            }
+                            throw new Error('Data structure changed')
+                            return output;
+                        }
+                        
+                    } else {
+                        output = {
+                            status: 500,
+                            Error: 'End cutter failed.'
+                        }
+                        throw new Error('End cutter failed.')
+                        return output;
+                    }
+                } else {
+                    output = {
+                            status: 500,
+                            Error: 'ytInitialData failed.'
+                        }
+                    throw new Error('ytInitialData failed.')
+                    return output;
+                }  
+            })
+            .catch(err =>{
+                output = {
+                            status: 500,
+                            Error: 'Fetch failed.'
+                        }
+                    throw new Error('Fetch failed.')
+                    return output;
+            });    
+        }
+    </script>
+    <script>
+        
+        function searchFocus(ele){
+            let search = document.getElementById("search");
+            search.style.boxShadow = '0 1px 8px rgba(176, 232, 247, 1), 0 1px 8px rgba(176, 232, 247, 0.5)';
+            document.getElementById("searchInput").focus();
+            let pan = document.getElementById("pan");
+            let h = window.innerHeight - 160;
+            pan.style.height = h.toString()+'px';
+            let pt = document.getElementById("pt"); 
+            let t = h/2;
+            pt.style.marginTop = t.toString()+'px';
+            pt.style.marginLeft = '50%';
+            pt.style.transform = 'translate(-50%,-50%)';
+        }
+        function searchFocusOut(ele){
+            let search = document.getElementById("search");
+            search.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1), 0 2px 3px rgba(0, 0, 0, 0.05)';
+            // let pan = document.getElementById("pan");
+            // pan.style.opacity = '0';
+            // pan.style.visibility = 'hidden';
+        }
+        async function showResults(id){
+            let ele = document.getElementById('searchInput');
+            document.getElementById("pt").style.display = 'none';
+            document.getElementById(id).style.display = "none";
+            if(ele.value.length > 3){
+                console.log('len > 3');
+                await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://www.youtube.com/results?app=desktop&search_query='+ele.value)}`)
+            .then(response => {
+                if (response.ok) return response.json()
+                output = {
+                            status: 500,
+                            Error: 'Network response was not ok.'
+                        }
+                throw new Error('Network response was not ok.')
+                document.getElementById("pt").innerHTML = "Please, Try Later! Server is Under Maintenance.";
+                    document.getElementById("pt").style.display = 'block';
+            })
+            .then(data => {
+                let cutter1 = "ytInitialData = ";
+                let s1 = data.contents.split(cutter1)[1];
+                let cutter2 = ";</scrip";
+                let finalDataString;
+                if(s1) {
+                    finalDataString = s1.split(cutter2);
+                    if(finalDataString[1]) {
+                        let obj = JSON.parse(finalDataString[0]);
+                        let contents = obj.contents?.twoColumnSearchResultsRenderer?.primaryContents?.sectionListRenderer?.contents[0]?.itemSectionRenderer?.contents;
+                        if(contents){
+                            let temp = [];
+                            contents.forEach(data => {
+                                if (data.videoRenderer) temp.push(data);                            
+                            });
+                            contents = temp;
+                            output = {
+                                status: 200,
+                                searchResults: contents
+                            }
+                            console.log(output);
+                            document.getElementById(id).innerHTML = JSON.stringify(output);
+                            document.getElementById(id).style.display = "block";
+                        } else {
+                            output = {
+                            status: 500,
+                            Error: 'Data structure changed'
+                            }
+                            throw new Error('Data structure changed')
+                            document.getElementById("pt").innerHTML = "Please, Try Later! Server is Under Maintenance.";
+                    document.getElementById("pt").style.display = 'block';
+                        }
+                        
+                    } else {
+                        output = {
+                            status: 500,
+                            Error: 'End cutter failed.'
+                        }
+                        throw new Error('End cutter failed.')
+                        document.getElementById("pt").innerHTML = "Please, Try Later! Server is Under Maintenance.";
+                    document.getElementById("pt").style.display = 'block';
+                    }
+                } else {
+                    output = {
+                            status: 500,
+                            Error: 'ytInitialData failed.'
+                        }
+                    throw new Error('ytInitialData failed.')
+                    document.getElementById("pt").innerHTML = "Please, Try Later! Server is Under Maintenance.";
+                    document.getElementById("pt").style.display = 'block';
+                }  
+            })
+            .catch(err =>{
+                output = {
+                            status: 500,
+                            Error: 'Fetch failed.'
+                        }
+                    throw new Error('Fetch failed.')
+                    document.getElementById("pt").innerHTML = "Please, Try Later! Server is Under Maintenance.";
+                    document.getElementById("pt").style.display = 'block';
+            });    
+            } else {
+                console.log('len <= 3');
+            document.getElementById("pt").innerHTML = "Please, type more than three(3) characters.";
+            document.getElementById("pt").style.display = 'block';
+            }
+            let pan = document.getElementById("pan");
+            pan.style.opacity = '1';
+            pan.style.visibility = 'visible';
+        }
+    </script>
+</body>
+</html>

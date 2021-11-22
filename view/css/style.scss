@@ -1,0 +1,43 @@
+$defaultFont: Helvetica, sans-serif;
+$defaultColor: black;
+$defaultBGColor: white;
+$defaultFontSize: 15px;
+
+body {
+  font-family: $defaultFont;
+  font-size: $defaultFontSize;
+  background-color: $defaultBGColor;
+  color: $defaultColor;
+  
+}
+
+.home {
+  background-color: $defaultBGColor;
+  min-width: 300px;
+  max-width: 700px;
+}
+
+.nav {
+ height: 50px;
+ background-color: red;
+ width: 100%;
+}
+
+.round {
+  -moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+  border-radius: 50%;
+}
+.small-btn {
+  height: 50px;
+  width: 50px;
+  background-color: $defaultBGColor;
+  display: inline-block;
+  line-height: 50px;
+	-moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .25), 0 2px 3px rgba(0, 0, 0, .1);
+	-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .25), 0 2px 3px rgba(0, 0, 0, .1);
+	box-shadow: 0 1px 1px rgba(0, 0, 0, .25), 0 2px 3px rgba(0, 0, 0, .1);
+}
+.nav .menu {
+  
+}

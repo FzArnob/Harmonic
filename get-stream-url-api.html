@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Harmonic Search</title>
+</head>
+<body>
+    <script>
+        var output;
+        var url = window.location.href;
+        var key = url.split("?key=")[1];
+        if(key){
+            fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://api3.youtube-mp3.org.in/@audio/'+key)}`)
+            .then(response => {
+                if (response.ok) return response.json()
+                output = {
+                            status: 500,
+                            Error: 'Network response was not ok.'
+                        }
+                        document.write(JSON.stringify(output));
+                throw new Error('Network response was not ok.')
+            })
+            .then(res => {
+                let data = JSON.parse(res.contents)
+                if(data.success){
+                    output = {
+                            status: 200,
+                            url: data.url
+                    }
+                    document.write(JSON.stringify(output));    
+                } else {
+                    output = {
+                            status: 500,
+                            Error: 'Failed to get url'
+                    }
+                    document.write(JSON.stringify(output));
+                    throw new Error('Failed to get url') 
+                }
+                
+            })
+            .catch(err =>{
+                output = {
+                            status: 500,
+                            Error: 'Fetch failed.'
+                        }
+                        document.write(JSON.stringify(output));
+                    throw new Error('Fetch failed.')
+            });    
+        } else {
+            output = {
+                            status: 500,
+                            Error: 'key extraction failed.'
+                        }
+                        document.write(JSON.stringify(output));
+            throw new Error('key extraction failed.')
+        }
+    </script>
+</body>
+</html>

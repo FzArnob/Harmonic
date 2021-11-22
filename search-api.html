@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Harmonic Search</title>
+</head>
+<body>
+    <script>
+        var output;
+        var url = window.location.href;
+        var key = url.split("?key=")[1];
+        if(key){
+            fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://www.youtube.com/results?app=desktop&search_query='+key)}`)
+            .then(response => {
+                if (response.ok) return response.json()
+                output = {
+                            status: 500,
+                            Error: 'Network response was not ok.'
+                        }
+                        document.write(JSON.stringify(output));
+                throw new Error('Network response was not ok.')
+            })
+            .then(data => {
+                let cutter1 = "ytInitialData = ";
+                let s1 = data.contents.split(cutter1)[1];
+                let cutter2 = ";</scrip";
+                let finalDataString;
+                if(s1) {
+                    finalDataString = s1.split(cutter2);
+                    if(finalDataString[1]) {
+                        let obj = JSON.parse(finalDataString[0]);
+                        let contents = obj.contents?.twoColumnSearchResultsRenderer?.primaryContents?.sectionListRenderer?.contents[0]?.itemSectionRenderer?.contents;
+                        if(contents){
+                            let temp = [];
+                            contents.forEach(data => {
+                                if (data.videoRenderer) temp.push(data);                            
+                            });
+                            contents = temp;
+                            output = {
+                                status: 200,
+                                searchResults: contents
+                            }
+                            console.log(output);
+                            document.write(JSON.stringify(output)); 
+                        } else {
+                            output = {
+                            status: 500,
+                            Error: 'Data structure changed'
+                            }
+                            document.write(JSON.stringify(output));
+                            throw new Error('Data structure changed')
+                        }
+                        
+                    } else {
+                        output = {
+                            status: 500,
+                            Error: 'End cutter failed.'
+                        }
+                        document.write(JSON.stringify(output));
+                        throw new Error('End cutter failed.')
+                    }
+                } else {
+                    output = {
+                            status: 500,
+                            Error: 'ytInitialData failed.'
+                        }
+                        document.write(JSON.stringify(output));
+                    throw new Error('ytInitialData failed.')
+                }  
+            })
+            .catch(err =>{
+                output = {
+                            status: 500,
+                            Error: 'Fetch failed.'
+                        }
+                        document.write(JSON.stringify(output));
+                    throw new Error('Fetch failed.')
+            });    
+        } else {
+            output = {
+                            status: 500,
+                            Error: 'key extraction failed.'
+                        }
+                        document.write(JSON.stringify(output));
+            throw new Error('key extraction failed.')
+        }
+    </script>
+</body>
+</html>
