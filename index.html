@@ -142,7 +142,7 @@
             if(ele.value.length > 3){
                 console.log('len > 3');
                 try{
-                    $.getJSON('https://www.whateverorigin.org/get?url=' + encodeURIComponent('https://www.youtube.com/results?app=desktop&search_query='+ele.value) + '&callback=?', 
+                    $.getJSON('https://thingproxy.freeboard.io/fetch/https://www.youtube.com/results?search_query='+ ele.value, 
                     function(data){
                         let cutter1 = "ytInitialData = ";
                         let s1 = data.contents.split(cutter1)[1];
