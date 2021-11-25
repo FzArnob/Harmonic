@@ -168,12 +168,10 @@
         if (ele.value.length > 3) {
           console.log("len > 3");
           try {
-            $.getJSON(
-              "https://thingproxy.freeboard.io/fetch/https://www.youtube.com/results?search_query=" +
-                ele.value,
-              function (data) {
+            let data = httpGet('https://thingproxy.freeboard.io/fetch/https://www.youtube.com/results?search_query='+ ele.value);
+              if (data) {
                 let cutter1 = "ytInitialData = ";
-                let s1 = data.contents.split(cutter1)[1];
+                let s1 = data.split(cutter1)[1];
                 let cutter2 = ";</scrip";
                 let finalDataString;
                 if (s1) {
@@ -231,7 +229,6 @@
                 // document.getElementById(id).innerHTML = JSON.stringify(data.contents);
                 // document.getElementById(id).style.display = "block";
               }
-            );
           } catch (err) {
             throw new Error(err);
             document.getElementById("pt").innerHTML =
